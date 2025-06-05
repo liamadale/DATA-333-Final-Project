@@ -4,7 +4,7 @@ Final Project Gradio App for DATA 333
 
 Group Members: Ben Klimala, Liam Dale, ???
 
-## Specification from DATA 333
+## Specification from DATA 333 Canvas
 
 You will design and build a simple but meaningful interactive Python app that demonstrates your understanding of user-centered design, basic programming, and GUI development using Gradio (or other GUI frameworks we've covered).
 
