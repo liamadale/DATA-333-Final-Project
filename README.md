@@ -1,8 +1,23 @@
-# DATA-333-Final-Project
+# DATA 333 Final Project - [APP_NAME]
 
 Final Project Gradio App for DATA 333 
 
 Group Members: Ben Klimala, Liam Dale, ???
+
+## TODO:
+
+- [ ]
+- [ ]
+- [ ]
+- [ ]
+- [ ]
+- [ ]
+
+## Specification for application
+
+### What are the functions of the program?
+
+### What are the components (libraries) that need to exist?
 
 ## Specification from DATA 333 Canvas
 
@@ -32,8 +47,5 @@ Record a short video (screen + voice) or give a live presentation covering:
 - Any challenges you faced and how you solved them
 
 - Every group member should participate in this presentation
-
-## Specification for application
-
 
 
