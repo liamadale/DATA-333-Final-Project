@@ -1,4 +1,4 @@
-# DATA 333 Final Project - [APP_NAME]
+# DATA 333 Final Project - RepShare
 
 Final Project Gradio App for DATA 333 
 
