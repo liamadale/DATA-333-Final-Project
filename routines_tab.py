@@ -159,7 +159,6 @@ def reset_plan():
 
 def routine_builder():
     """Create the workout routine builder interface."""
-    gr.Markdown("# 🏋️‍♂️ RepShare - Workout Builder")
 
     with gr.Row():
         section_label = gr.Dropdown(
@@ -211,5 +210,5 @@ def routine_builder():
 
 def routines_tab():
     """Tab wrapper used in the main application."""
-    with gr.TabItem("Routines"):
+    with gr.TabItem("⌛ Routines"):
         routine_builder()
