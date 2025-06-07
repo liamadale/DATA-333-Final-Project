@@ -66,6 +66,13 @@ def publish_plan():
     full_plan.extend(staged_plan)
     return "\n".join(full_plan)
 
+# Function to reset both staged and published plans
+def reset_plan():
+    """Clear both staged and final workout plans."""
+    staged_plan.clear()
+    full_plan.clear()
+    return "", ""
+
 # Function to reset the staged plan
 with gr.Blocks() as demo:
     # Title and description
@@ -86,6 +93,7 @@ with gr.Blocks() as demo:
     add_button = gr.Button("Γ₧ò Add to Staged Plan")
     clear_button = gr.Button("≡ƒ¬⌐ Clear Staged Plan")
     publish_button = gr.Button("Γ£à Publish Workout Plan")
+    reset_button = gr.Button("🔄 Reset Plans")
 
     # Output areas for staged and published plans
     staged_output = gr.Textbox(label="Staged Workout Plan", lines=15)
@@ -101,5 +109,6 @@ with gr.Blocks() as demo:
     delete_button.click(fn=delete_entry, inputs=delete_index, outputs=staged_output)
     clear_button.click(fn=clear_plan, outputs=staged_output)
     publish_button.click(fn=publish_plan, outputs=published_output)
+    reset_button.click(fn=reset_plan, outputs=[staged_output, published_output])
 
 demo.launch() 
