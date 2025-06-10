@@ -1,4 +1,5 @@
 import gradio as gr
+import pandas as pd
 
 # Define exercises for the workout routine builder
 exercise_dict = {
@@ -112,8 +113,8 @@ exercise_dict = {
 }
 
 # Lists to hold staged and published workout routines
-full_plan = []
-staged_plan = []
+full_plan = pd.DataFrame(columns=["Section", "Category", "Exercise", "Sets", "Reps"])
+staged_plan = pd.DataFrame(columns=["Section", "Category", "Exercise", "Sets", "Reps"])
 
 def get_exercises(category: str):
     """Return available exercises for the selected category."""
@@ -121,41 +122,49 @@ def get_exercises(category: str):
 
 def add_workout(section_label: str, category: str, exercise: str, sets: str, reps: str):
     """Add a workout entry to the staged plan."""
-    if sets == "None" or reps == "None":
-        entry = f"{section_label} - {category}: {exercise} (timed/no reps)"
-    else:
-        entry = f"{section_label} - {category}: {exercise} {sets}x{reps}"
-    staged_plan.append(entry)
-    return format_staged_plan()
+    global staged_plan
+    row = {
+        "Section": section_label,
+        "Category": category,
+        "Exercise": exercise,
+        "Sets": sets,
+        "Reps": reps,
+    }
+    staged_plan.loc[len(staged_plan)] = row
+    return staged_plan
 
 def format_staged_plan():
-    """Format the staged plan for display."""
-    return "\n".join([f"[{i}] {entry}" for i, entry in enumerate(staged_plan)])
+    """Return the staged plan DataFrame."""
+    return staged_plan
 
 def delete_entry(index: str):
     """Delete an entry from the staged plan by index."""
+    global staged_plan
     try:
-        staged_plan.pop(int(index))
+        staged_plan.drop(index=int(index), inplace=True)
+        staged_plan.reset_index(drop=True, inplace=True)
     except Exception:
         pass
-    return format_staged_plan()
+    return staged_plan
 
 def clear_plan():
     """Clear the staged plan."""
-    staged_plan.clear()
-    return ""
+    global staged_plan
+    staged_plan = staged_plan.iloc[0:0].copy()
+    return staged_plan
 
 def publish_plan():
     """Publish the staged plan to the final plan."""
-    full_plan.clear()
-    full_plan.extend(staged_plan)
-    return "\n".join(full_plan)
+    global full_plan
+    full_plan = staged_plan.copy()
+    return full_plan
 
 def reset_plan():
     """Reset both staged and published plans."""
-    staged_plan.clear()
-    full_plan.clear()
-    return "", ""
+    global staged_plan, full_plan
+    staged_plan = staged_plan.iloc[0:0].copy()
+    full_plan = full_plan.iloc[0:0].copy()
+    return staged_plan, full_plan
 
 def routine_builder():
     """Create the workout routine builder interface."""
@@ -188,12 +197,20 @@ def routine_builder():
     publish_button = gr.Button("📣 Publish Workout Plan")
     reset_button = gr.Button("🔄 Reset Plans")
 
-    staged_output = gr.Textbox(label="Staged Workout Plan", lines=15)
+    staged_output = gr.DataFrame(
+        headers=["Section", "Category", "Exercise", "Sets", "Reps"],
+        label="Staged Workout Plan",
+        interactive=True,
+    )
     delete_index = gr.Textbox(
         label="Index to Delete", placeholder="Enter index number to delete"
     )
     delete_button = gr.Button("❌ Delete Entry")
-    published_output = gr.Textbox(label="Final Published Plan", lines=10)
+    published_output = gr.DataFrame(
+        headers=["Section", "Category", "Exercise", "Sets", "Reps"],
+        label="Final Published Plan",
+        interactive=False,
+    )
 
     category_dropdown.change(
         fn=get_exercises, inputs=category_dropdown, outputs=exercise_dropdown
