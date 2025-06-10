@@ -169,6 +169,9 @@ def reset_plan():
 def routine_builder():
     """Create the workout routine builder interface."""
 
+    gr.Markdown("## ⌛ Workout Routine Builder")
+    gr.Markdown("### Create your custom workout routine by adding exercises to the staged plan. You can then publish it to finalize your workout plan.")
+
     with gr.Row():
         section_label = gr.Dropdown(
             label="Section Label",
