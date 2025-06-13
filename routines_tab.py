@@ -131,11 +131,11 @@ def add_workout(section_label: str, category: str, exercise: str, sets: str, rep
         "Reps": reps,
     }
     staged_plan.loc[len(staged_plan)] = row
-    return staged_plan
+    return format_staged_plan()
 
 def format_staged_plan():
-    """Return the staged plan DataFrame."""
-    return staged_plan
+    """Return the staged plan DataFrame with an index column for easy deletion."""
+    return staged_plan.reset_index().rename(columns={"index": "Index"})
 
 def delete_entry(index: str):
     """Delete an entry from the staged plan by index."""
@@ -145,13 +145,13 @@ def delete_entry(index: str):
         staged_plan.reset_index(drop=True, inplace=True)
     except Exception:
         pass
-    return staged_plan
+    return format_staged_plan()
 
 def clear_plan():
     """Clear the staged plan."""
     global staged_plan
     staged_plan = staged_plan.iloc[0:0].copy()
-    return staged_plan
+    return format_staged_plan()
 
 def publish_plan():
     """Publish the staged plan to the final plan."""
@@ -164,7 +164,7 @@ def reset_plan():
     global staged_plan, full_plan
     staged_plan = staged_plan.iloc[0:0].copy()
     full_plan = full_plan.iloc[0:0].copy()
-    return staged_plan, full_plan
+    return format_staged_plan(), full_plan
 
 def routine_builder():
     """Create the workout routine builder interface."""
@@ -201,7 +201,7 @@ def routine_builder():
     reset_button = gr.Button("🔄 Reset Plans")
 
     staged_output = gr.DataFrame(
-        headers=["Section", "Category", "Exercise", "Sets", "Reps"],
+        headers=["Index", "Section", "Category", "Exercise", "Sets", "Reps"],
         label="Staged Workout Plan",
         interactive=True,
     )
