@@ -8,15 +8,15 @@ Group Members: **Ben Klimala**, **Liam Dale**, **Suvir Grewal**, **Daniel Zimmer
 
 - [x] Combine Daniel and Liam's codebase into one application, provide tab functionality to switch between modes.
 - [ ] Add exporting functionality to workout routines creator.
-  - [ ] Export as CSV / Excel functionality.
+  - [X] Export as CSV / Excel functionality.
   - [ ] Export as Website functionality.
 - [x] Add saving functionality to workout recorder. >[CSV]<
 - [ ] Add saving functionality to workout routines creator. >[CSV]<
-- [ ] Add function to save CSV / CSV locations to an SQLite database.
+- ~~[ ] Add function to save CSV / CSV locations to an SQLite database.~~
 - [ ] Add a linear regression model which can take in data and create a graph showing when you can lift x weight at y time.
-- [ ] Add searching UI allowing the display of a CSV / Dataframe.
-  - [ ] Add backend code to allow querying of SQL database to populate dropdowns and search box.
-  - [ ] Add in a nice display for queried recorded workouts / saved workout routines.
+- ~~[ ] Add searching UI allowing the display of a CSV / Dataframe.~~
+  - ~~[ ] Add backend code to allow querying of SQL database to populate dropdowns and search box.~~
+  - ~~[ ] Add in a nice display for queried recorded workouts / saved workout routines.~~
 
 ## 📜 Specification for application
 
