@@ -3,6 +3,8 @@ import pandas as pd
 from datetime import datetime
 import os
 
+from utils.export import export_to_csv
+
 folder_path = "logs"  # Relative folder path
 os.makedirs(folder_path, exist_ok=True)  # Ensure folder exists
 
@@ -67,15 +69,13 @@ def add_entry(date, body_part, exercise, sets, reps, weight):
         "Weight": weight
     }
     log.append(entry)
-    df = pd.DataFrame(log)
-    df.to_csv(LOG_FILE, index=False)
+    df = export_to_csv(log, LOG_FILE)
     return df
 
 def download_log():
     if not log:
         return None
-    df = pd.DataFrame(log)
-    df.to_csv(LOG_FILE, index=False)
+    export_to_csv(log, LOG_FILE)
     return LOG_FILE
 
 def clear_log():
