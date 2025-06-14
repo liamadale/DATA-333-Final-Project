@@ -1,5 +1,8 @@
 import gradio as gr
 import pandas as pd
+import os
+
+from utils.export import export_to_csv
 
 # Define exercises for the workout routine builder
 exercise_dict = {
@@ -116,6 +119,11 @@ exercise_dict = {
 full_plan = pd.DataFrame(columns=["Section", "Category", "Exercise", "Sets", "Reps"])
 staged_plan = pd.DataFrame(columns=["Section", "Category", "Exercise", "Sets", "Reps"])
 
+# File path for exporting published routines
+folder_path = "logs"
+os.makedirs(folder_path, exist_ok=True)
+ROUTINE_FILE = os.path.join(folder_path, "workout_routines.csv")
+
 def get_exercises(category: str):
     """Return available exercises for the selected category."""
     return gr.update(choices=exercise_dict[category], value=exercise_dict[category][0])
@@ -154,16 +162,27 @@ def clear_plan():
     return format_staged_plan()
 
 def publish_plan():
-    """Publish the staged plan to the final plan."""
+    """Publish the staged plan to the final plan and save to CSV."""
     global full_plan
     full_plan = staged_plan.copy()
+    export_to_csv(full_plan, ROUTINE_FILE)
     return full_plan
+
+
+def download_plan():
+    """Return the CSV file containing the published plan for download."""
+    if full_plan.empty:
+        return None
+    export_to_csv(full_plan, ROUTINE_FILE)
+    return ROUTINE_FILE
 
 def reset_plan():
     """Reset both staged and published plans."""
     global staged_plan, full_plan
     staged_plan = staged_plan.iloc[0:0].copy()
     full_plan = full_plan.iloc[0:0].copy()
+    if os.path.exists(ROUTINE_FILE):
+        os.remove(ROUTINE_FILE)
     return format_staged_plan(), full_plan
 
 def routine_builder():
@@ -215,6 +234,10 @@ def routine_builder():
         interactive=False,
     )
 
+    gr.Markdown("### 📁 Download or Manage Your Plan")
+    download_button = gr.Button("Download Plan as CSV")
+    file_output = gr.File(label="Click to Download")
+
     category_dropdown.change(
         fn=get_exercises, inputs=category_dropdown, outputs=exercise_dropdown
     )
@@ -226,6 +249,7 @@ def routine_builder():
     delete_button.click(fn=delete_entry, inputs=delete_index, outputs=staged_output)
     clear_button.click(fn=clear_plan, outputs=staged_output)
     publish_button.click(fn=publish_plan, outputs=published_output)
+    download_button.click(fn=download_plan, outputs=file_output)
     reset_button.click(fn=reset_plan, outputs=[staged_output, published_output])
 
 def routines_tab():
