@@ -10,7 +10,6 @@ with gr.Blocks() as demo:
         recorder_tab()
         routines_tab()
         prediction_tab()
-        search_tab()
 
 
 demo.launch()
