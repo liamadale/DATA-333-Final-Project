@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from scipy import stats
 
+#Define Limits
+##MAX_PREDICTED_WEIGHT = 1000
+##MIN_PREDICTED_WEIGHT = 0
+
 
 def track_exercise_weights(file_path, exercise_name):
     try:
@@ -31,6 +35,13 @@ def track_exercise_weights(file_path, exercise_name):
         
         # Calculate linear regression
         slope, intercept, r_value, p_value, std_err = stats.linregress(date_nums, pounds)
+
+        #PREDICT weight one week from last entry
+        #future_date = date_nums[-1] + 7
+        #predicted_weight = slope * future_date + intercept
+
+        #Apply limits
+        predicted_weight = max(min(predicted_weight, MAX_PREDICTED_WEIGHT), MIN_PREDICTED_WEIGHT)
         
         # Create regression line
         regression_line = slope * date_nums + intercept
@@ -59,6 +70,7 @@ def track_exercise_weights(file_path, exercise_name):
             "Progress": f"{filtered_df['Weight'].iloc[-1] - filtered_df['Weight'].iloc[0]} lbs",
             "Average Weight": f"{filtered_df['Weight'].mean():.2f} lbs",
             "Max Weight": f"{filtered_df['Weight'].max()} lbs"
+            #"Predicted Weight by Next Week!": f"{predicted_weight:.2f} lbs"
         }
         
         stats_text = "\n".join([f"{k}: {v}" for k, v in stats_data.items()])
